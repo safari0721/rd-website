@@ -13,8 +13,8 @@ func (r *UserRepo) Create(user *models.User) error {
 	return r.DB.Create(user).Error
 }
 
-func (r *UserRepo) FindByEmail(email string) (*models.User, error) {
+func (r *UserRepo) FindByAgentID(agentID string) (*models.User, error) {
 	var user models.User
-	result := r.DB.Where("email = ?", email).First(&user)
+	result := r.DB.Where("agent_id = ?", agentID).First(&user)
 	return &user, result.Error
 }

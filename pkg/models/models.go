@@ -9,7 +9,7 @@ import (
 type User struct {
 	gorm.Model
 	Name     string
-	AgentID  string
+	AgentID  string `gorm:"uniqueIndex"`
 	Password string
 }
 

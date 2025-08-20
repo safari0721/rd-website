@@ -25,13 +25,18 @@ type AuthHandler struct {
 func (h *AuthHandler) Signup(c *gin.Context) {
 	var input signupRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		return
+	}
+
+	if len(input.Name) < 1 || len(input.Name) > 100 || len(input.AgentID) < 3 || len(input.AgentID) > 64 || len(input.Password) < 8 || len(input.Password) > 128 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 		return
 	}
 
 	err := h.AuthService.Signup(input.Name, input.AgentID, input.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Signup failed: " + err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "signup failed"})
 		return
 	}
 
@@ -41,7 +46,12 @@ func (h *AuthHandler) Signup(c *gin.Context) {
 func (h *AuthHandler) Login(c *gin.Context) {
 	var input loginRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		return
+	}
+
+	if len(input.AgentID) < 3 || len(input.AgentID) > 64 || len(input.Password) < 8 || len(input.Password) > 128 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 		return
 	}
 

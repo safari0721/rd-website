@@ -20,8 +20,8 @@ func (s *AuthService) Signup(name, agentID, password string) error {
 	return s.Repo.Create(user)
 }
 
-func (s *AuthService) Login(email, password string) (*models.User, error) {
-	user, err := s.Repo.FindByEmail(email)
+func (s *AuthService) Login(agentID, password string) (*models.User, error) {
+	user, err := s.Repo.FindByAgentID(agentID)
 	if err != nil {
 		return nil, err
 	}
